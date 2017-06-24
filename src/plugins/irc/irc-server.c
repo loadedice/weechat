@@ -572,7 +572,17 @@ irc_server_set_nick (struct t_irc_server *server, const char *nick)
 
     if (server->nick)
         free (server->nick);
-    server->nick = (nick) ? strdup (nick) : NULL;
+
+    if (nick)
+    {
+      server->nick = strdup (nick);
+      server->nick_length = strlen (nick);
+    }
+    else
+    {
+      server->nick = NULL;
+      server->nick_length = 0;
+    }
 
     /* set local variable "nick" for server and all channels/pv */
     weechat_buffer_set (server->buffer, "localvar_set_nick", nick);
@@ -1167,6 +1177,7 @@ irc_server_alloc (const char *name)
     new_server->nick_alternate_number = -1;
     new_server->nick = NULL;
     new_server->nick_modes = NULL;
+    new_server->nick_length = 0;
     new_server->cap_away_notify = 0;
     new_server->cap_account_notify = 0;
     new_server->cap_extended_join = 0;
@@ -5662,6 +5673,8 @@ irc_server_add_to_infolist (struct t_infolist *infolist,
         return 0;
     if (!weechat_infolist_new_var_string (ptr_item, "nick", server->nick))
         return 0;
+    if (!weechat_infolist_new_var_integer (ptr_item, "nick_length", server->nick_length))
+        return 0;
     if (!weechat_infolist_new_var_string (ptr_item, "nick_modes", server->nick_modes))
         return 0;
     if (!weechat_infolist_new_var_integer (ptr_item, "cap_away_notify", server->cap_away_notify))
@@ -6048,6 +6061,7 @@ irc_server_print_log ()
         weechat_log_printf ("  nick_alternate_number: %d",    ptr_server->nick_alternate_number);
         weechat_log_printf ("  nick . . . . . . . . : '%s'",  ptr_server->nick);
         weechat_log_printf ("  nick_modes . . . . . : '%s'",  ptr_server->nick_modes);
+        weechat_log_printf ("  nick_legnth. . . . . : %d",    ptr_server->nick_length);
         weechat_log_printf ("  cap_away_notify. . . : %d",    ptr_server->cap_away_notify);
         weechat_log_printf ("  cap_account_notify . : %d",    ptr_server->cap_account_notify);
         weechat_log_printf ("  cap_extended_join. . : %d",    ptr_server->cap_extended_join);

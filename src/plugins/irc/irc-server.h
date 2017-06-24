@@ -188,6 +188,7 @@ struct t_irc_server
                                     /* (nick____1, nick____2, ...)           */
     char *nick;                     /* current nickname                      */
     char *nick_modes;               /* nick modes                            */
+    int nick_length;                /* length of the current nickname        */
     int cap_away_notify;            /* 1 if capability away-notify is enabled*/
     int cap_account_notify;         /* 1 if CAP account-notify is enabled    */
     int cap_extended_join;          /* 1 if CAP extended-join is enabled     */

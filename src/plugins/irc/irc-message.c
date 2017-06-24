@@ -974,7 +974,7 @@ irc_message_split (struct t_irc_server *server, const char *message)
     struct t_hashtable *hashtable;
     char **argv, **argv_eol, *tags, *host, *command, *arguments, target[512];
     char *pos, monitor_action[3];
-    int split_ok, argc, index_args, max_length_nick, max_length_host;
+    int split_ok, argc, index_args, current_length_nick, max_length_host;
 
     split_ok = 0;
     tags = NULL;
@@ -1030,13 +1030,13 @@ irc_message_split (struct t_irc_server *server, const char *message)
         index_args = 1;
     }
 
-    max_length_nick = (server && (server->nick_max_length > 0)) ?
-        server->nick_max_length : 16;
-    max_length_host = 1 + /* ":"  */
-        max_length_nick + /* nick */
-        1 +               /* "!"  */
-        63 +              /* host */
-        1;                /* " "  */
+    current_length_nick = (server && (server->nick_length > 0)) ?
+        server->nick_length : 16;
+    max_length_host = 1 +     /* ":"  */
+        current_length_nick + /* nick */
+        1 +                   /* "!"  */
+        63 +                  /* host */
+        1;                    /* " "  */
 
     if ((weechat_strcasecmp (command, "ison") == 0)
         || (weechat_strcasecmp (command, "wallops") == 0))
